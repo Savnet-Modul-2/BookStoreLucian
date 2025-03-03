@@ -1,7 +1,11 @@
 package com.javaacademy.learning.bookstore.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "user")
 @Table(name = "bookstore", schema = "public")
@@ -30,7 +34,24 @@ public class User {
     private boolean verifiedAccount;
     @Column(name = "MAILCODE")
     private String mailCode;
+    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.MERGE, CascadeType.REMOVE},
+            fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            mappedBy = "reservingUser")
+    @JsonManagedReference
+    private List<Reservation> reservations = new ArrayList<>();
 
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+    public void addReservation(Reservation reservation) {
+        reservations.add(reservation);
+        reservation.setReservingUser(this);
+    }
 
     public String getFirstName() {
         return firstName;
