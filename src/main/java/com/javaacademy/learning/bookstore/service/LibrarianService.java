@@ -1,10 +1,14 @@
 package com.javaacademy.learning.bookstore.service;
 
 import com.javaacademy.learning.bookstore.dto.LibrarianDTO;
+import com.javaacademy.learning.bookstore.dto.ReservationDTO;
 import com.javaacademy.learning.bookstore.entities.Librarian;
+import com.javaacademy.learning.bookstore.entities.Reservation;
+import com.javaacademy.learning.bookstore.entities.ReservationStatus;
 import com.javaacademy.learning.bookstore.mapper.LibrarianMapper;
 import com.javaacademy.learning.bookstore.repository.LibrarianRepository;
 import com.javaacademy.learning.bookstore.repository.LibraryRepository;
+import com.javaacademy.learning.bookstore.repository.ReservationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,10 @@ public class LibrarianService {
     private LibrarianRepository librarianRepository;
     @Autowired
     private LibraryRepository libraryRepository;
+    @Autowired
+    private ReservationService reservationService;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     public LibrarianDTO create(LibrarianDTO librarianDTO) {
         Librarian newLibrarian = LibrarianMapper.librarianDTO2Librarian(librarianDTO);
@@ -40,4 +48,21 @@ public class LibrarianService {
         }
         throw new IllegalArgumentException("Invalid credentials");
     }
+
+    public Reservation updateReservationStatus(Long reservationId, ReservationStatus reservationStatus) {
+        Reservation reservationToUpdate = reservationRepository.findById(reservationId).orElse(null);
+
+        if (reservationToUpdate == null) {
+            throw new EntityNotFoundException("Reservation not found.");
+        }
+
+        if (reservationToUpdate.getStatus().isNextState(reservationStatus)) {
+            reservationToUpdate.setStatus(reservationStatus);
+            return reservationRepository.save(reservationToUpdate);
+        } else {
+            throw new IllegalStateException("Invalid transition: " + reservationToUpdate.getStatus() + " -> " + reservationStatus);
+        }
+    }
+
+
 }
