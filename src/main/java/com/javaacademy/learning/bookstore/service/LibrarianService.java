@@ -14,6 +14,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class LibrarianService {
     @Autowired
@@ -49,11 +51,15 @@ public class LibrarianService {
         throw new IllegalArgumentException("Invalid credentials");
     }
 
-    public Reservation updateReservationStatus(Long reservationId, ReservationStatus reservationStatus) {
+    public Reservation updateReservationStatus(Long reservationId, Long librarianId, ReservationStatus reservationStatus) {
         Reservation reservationToUpdate = reservationRepository.findById(reservationId).orElse(null);
+        Librarian librarian = librarianRepository.findById(librarianId).orElse(null);
 
         if (reservationToUpdate == null) {
             throw new EntityNotFoundException("Reservation not found.");
+        }
+        if(!Objects.equals(librarian.getLibrary().getId(),reservationToUpdate.getBookExemplary().getBook().getLibrary().getId())){
+            throw new EntityNotFoundException("Librarian dosen't have access to this reservation");
         }
 
         if (reservationToUpdate.getStatus().isNextState(reservationStatus)) {

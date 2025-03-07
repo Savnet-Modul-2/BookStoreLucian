@@ -1,6 +1,7 @@
 package com.javaacademy.learning.bookstore.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -34,11 +35,11 @@ public class User {
     private boolean verifiedAccount;
     @Column(name = "MAILCODE")
     private String mailCode;
-    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.MERGE, CascadeType.REMOVE},
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
             fetch = FetchType.LAZY,
             orphanRemoval = true,
             mappedBy = "reservingUser")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Reservation> reservations = new ArrayList<>();
 
     public List<Reservation> getReservations() {

@@ -13,15 +13,15 @@ public interface ExemplaryRepository extends JpaRepository<Exemplary, Long> {
     Optional<Exemplary> findById(long id);
 
     //@Query(value = """
-      //      SELECT * FROM exemplaries e
-        //    WHERE e.ID NOT IN (
-          //      SELECT r.EXEMPLARY_ID FROM reservations r
-            //    WHERE (r.START_DATE <= :endDate OR r.END_DATE >= :startDate)
-              //  AND r.STATUS IN ('IN_PROGRESS', 'PENDING')
-            //)
-            //AND e.BOOK_ID = :bookId
-            //LIMIT 1
-            //""", nativeQuery = true)
+    //      SELECT * FROM exemplaries e
+    //    WHERE e.ID NOT IN (
+    //      SELECT r.EXEMPLARY_ID FROM reservations r
+    //    WHERE (r.START_DATE <= :endDate OR r.END_DATE >= :startDate)
+    //  AND r.STATUS IN ('IN_PROGRESS', 'PENDING')
+    //)
+    //AND e.BOOK_ID = :bookId
+    //LIMIT 1
+    //""", nativeQuery = true)
 
     @Query(value = """
         SELECT * FROM exemplaries exemplary

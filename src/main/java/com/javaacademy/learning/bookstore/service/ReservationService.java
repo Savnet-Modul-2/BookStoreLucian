@@ -1,7 +1,9 @@
 package com.javaacademy.learning.bookstore.service;
 
 
+import com.javaacademy.learning.bookstore.dto.ReservationDTO;
 import com.javaacademy.learning.bookstore.entities.*;
+import com.javaacademy.learning.bookstore.mapper.ReservationMapper;
 import com.javaacademy.learning.bookstore.repository.BookRepository;
 import com.javaacademy.learning.bookstore.repository.ExemplaryRepository;
 import com.javaacademy.learning.bookstore.repository.ReservationRepository;
@@ -30,7 +32,7 @@ public class ReservationService {
     public Page<Book> getBooks(String author, String title, Pageable pageable) {
         return bookRepository.findBooks(author, title, pageable);
     }
-    public Reservation reserveBook(Long userId, Long bookId, LocalDate startDate, LocalDate endDate) {
+    public ReservationDTO reserveBook(Long userId, Long bookId, LocalDate startDate, LocalDate endDate) {
         User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
         Book book = bookRepository.findById(bookId).orElseThrow(EntityNotFoundException::new);
         Exemplary availableExemplary = exemplaryRepository.findAvailableExemplary(bookId, startDate, endDate).orElseThrow(EntityNotFoundException::new);
@@ -40,7 +42,9 @@ public class ReservationService {
         reservation.setStatus(ReservationStatus.PENDING);
         user.addReservation(reservation);
         availableExemplary.addReservations(reservation);
-        return reservationRepository.save(reservation);
+        Reservation newReservationSaved = reservationRepository.save(reservation);
+        ReservationDTO newReservationDTO = ReservationMapper.reservation2reservationDTO(newReservationSaved);
+        return newReservationDTO;
     }
 
 }

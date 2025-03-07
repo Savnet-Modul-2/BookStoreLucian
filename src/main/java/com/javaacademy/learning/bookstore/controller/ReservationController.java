@@ -1,5 +1,7 @@
 package com.javaacademy.learning.bookstore.controller;
 
+import com.javaacademy.learning.bookstore.dto.ReservationDTO;
+import com.javaacademy.learning.bookstore.dto.validation.ValidationOrder;
 import com.javaacademy.learning.bookstore.entities.Book;
 import com.javaacademy.learning.bookstore.entities.Reservation;
 import com.javaacademy.learning.bookstore.entities.ReservationStatus;
@@ -7,14 +9,17 @@ import com.javaacademy.learning.bookstore.mapper.ReservationMapper;
 import com.javaacademy.learning.bookstore.repository.ReservationRepository;
 import com.javaacademy.learning.bookstore.service.LibrarianService;
 import com.javaacademy.learning.bookstore.service.ReservationService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Enumeration;
 import java.util.List;
 
 @RestController
@@ -40,9 +45,14 @@ public class ReservationController {
     }
 
     @PostMapping("/{userId}/{bookId}")
-    public ResponseEntity<?> reserveBook(@PathVariable(name = "userId") Long userId, @PathVariable(name = "bookId") Long bookId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate) {
-        Reservation createdReservation = reservationService.reserveBook(userId, bookId, startDate, endDate);
-        return ResponseEntity.ok(ReservationMapper.reservation2reservationDTO(createdReservation));
+    public ResponseEntity<?> reserveBook(
+            @PathVariable(name = "userId") Long userId,
+            @PathVariable(name = "bookId") Long bookId,
+            @Validated(ValidationOrder.class) @RequestBody ReservationDTO reservationDTO)
+            {
+
+        ReservationDTO createdReservation = reservationService.reserveBook(userId, bookId, reservationDTO.getStartDate(), reservationDTO.getEndDate());
+        return ResponseEntity.ok(createdReservation);
     }
 
     @PutMapping("/{reservationId}")

@@ -1,12 +1,11 @@
 package com.javaacademy.learning.bookstore.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "reservation")
 @Table(name = "Reservations", schema = "public")
 public class Reservation {
     @Id
@@ -21,11 +20,10 @@ public class Reservation {
     private ReservationStatus status;
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    @JsonBackReference
     private User reservingUser;
+
     @ManyToOne
     @JoinColumn(name = "EXEMPLARY_ID")
-    @JsonBackReference
     private Exemplary bookExemplary;
 
     public long getId() {

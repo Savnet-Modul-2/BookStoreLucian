@@ -1,5 +1,7 @@
 package com.javaacademy.learning.bookstore.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -21,11 +23,11 @@ public class Exemplary {
     @ManyToOne
     @JoinColumn(name = "BOOK_ID")
     private Book book;
-    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.MERGE, CascadeType.REMOVE},
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
             fetch = FetchType.LAZY,
             orphanRemoval = true,
             mappedBy = "bookExemplary")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Reservation> reservations = new ArrayList<>();
 
     public List<Reservation> getReservations() {
