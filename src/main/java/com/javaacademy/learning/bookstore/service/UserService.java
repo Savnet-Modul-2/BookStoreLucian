@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -26,7 +27,6 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private EmailService emailService;
-
     public UserDTO createUser(UserDTO userDTO) {
         User newUser = UserMapper.userDtoToUser(userDTO);
         String encryptedPassword = DigestUtils
