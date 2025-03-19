@@ -1,12 +1,14 @@
 package com.javaacademy.learning.bookstore.dto;
 
 import com.javaacademy.learning.bookstore.entities.Category;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
 public class BookDTO {
     private Long id;
     private String isbn;
+    @NotNull
     private String title;
     private String author;
     private LocalDateTime appearanceDate;

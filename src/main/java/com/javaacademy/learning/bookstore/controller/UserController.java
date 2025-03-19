@@ -43,5 +43,11 @@ public class UserController {
         return ResponseEntity.ok(loggedUser.getId().toString());
     }
 
+    @PostMapping("/resendEmailVerificationCode")
+    public ResponseEntity<?> resendEmail(@RequestParam String email) {
+        userService.resendEmail(email);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

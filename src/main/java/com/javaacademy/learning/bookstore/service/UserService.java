@@ -40,6 +40,14 @@ public class UserService {
 
     }
 
+    public void resendEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
+        user.setMailCode(RandomStringGenerator.generateRandomString());
+        userRepository.save(user);
+        emailService.sendSimpleMail(new EmailDetails(email, user.getMailCode(), "Cod mail retrimis"));
+
+    }
+
     public UserDTO getById(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         User user = userOptional.get();
