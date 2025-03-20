@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "user")
-@Table(name = "bookstore", schema = "public")
+@Table(name = "user_app", schema = "public")
 public class User {
     @Id
     @Column(name = "ID")

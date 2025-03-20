@@ -24,7 +24,7 @@ public class Librarian {
     private String password;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "library_id", referencedColumnName = "id")
+    @JoinColumn(name = "library_id")
     private Library library;
 
 

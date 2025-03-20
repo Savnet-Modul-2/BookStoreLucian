@@ -28,6 +28,7 @@ dependencies {
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.18.0'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+	runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
